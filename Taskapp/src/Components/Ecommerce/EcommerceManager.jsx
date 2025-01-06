@@ -1,4 +1,3 @@
-// src/Components/Ecommerce/EcommerceManager.jsx
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import ProductList from "../Ecommerce/ProductList";
@@ -6,12 +5,11 @@ import ProductDetail from "../Ecommerce/ProductDetail";
 import Login from "../Ecommerce/LoginForm";
 import Signup from "../Ecommerce/SignupForm";
 import ProductForm from "./ProductForm";
-import { Toast } from "../../ui/index"; // Import Toast component
+import { Toast } from "../../ui/index";
 
 const EcommerceManager = () => {
   return (
-    <div className="max-w-7xl mx-auto p-6 mt-6">
-      {/* Routes */}
+    <div className=" mx-auto p-6 mt-6 w-full">
       <Routes>
         <Route path="/" element={<ProductList />} />
         <Route path="/product/:id" element={<ProductDetail />} />
@@ -20,7 +18,6 @@ const EcommerceManager = () => {
         <Route path="/addproduct" element={<ProductForm />} />
       </Routes>
 
-      {/* Toast component */}
       <Toast />
     </div>
   );

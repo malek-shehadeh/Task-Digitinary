@@ -114,7 +114,7 @@ const Form = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="p-6 space-y-6 mt-6 pt-6">
+    <form onSubmit={handleSubmit} className="p-6 space-y-6 mt-6 pt-12">
       <FormField
         label="Full Name"
         value={formData.fullName}

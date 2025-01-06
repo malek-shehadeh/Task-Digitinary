@@ -21,7 +21,6 @@ const ProductDetail = () => {
   useEffect(() => {
     dispatch(fetchProductById(id));
 
-    // Cleanup
     return () => {
       dispatch(clearSelectedProduct());
     };
@@ -61,7 +60,6 @@ const ProductDetail = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row gap-8">
-        {/* Image Gallery */}
         <div className="md:w-1/2">
           <div className="mb-4">
             <img
@@ -91,7 +89,6 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* Product Info */}
         <div className="md:w-1/2">
           <Button
             variant="outline"
@@ -104,7 +101,7 @@ const ProductDetail = () => {
           <p className="text-gray-600 mb-4">{product.description}</p>
           <div className="mb-6">
             <span className="text-2xl font-bold text-blue-600">
-              ${product.price}
+              {product.price}JD
             </span>
             {product.category && (
               <span className="ml-4 text-sm text-gray-500">

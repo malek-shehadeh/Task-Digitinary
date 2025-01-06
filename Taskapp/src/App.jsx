@@ -9,6 +9,7 @@ import AppChat from "./Components/app-chat/AppChat";
 import ReduxProvider from "./pages/ReduxFavorites/ReduxProvider";
 import ContextFavorites from "./pages/ContextFavorites/FavoritesContext";
 import EcommerceManager from "./Components/Ecommerce/EcommerceManager";
+import Welcome from "./Components/Welcome";
 
 const App = () => (
   <TaskProvider>
@@ -17,6 +18,7 @@ const App = () => (
         <Navbar />
         <div className="p-4">
           <Routes>
+            <Route path="/" element={<Welcome />} />
             <Route path="/task-manager" element={<TaskManager />} />
             <Route path="/form" element={<Form />} />
             <Route path="/appchat" element={<AppChat />} />

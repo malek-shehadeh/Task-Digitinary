@@ -1,5 +1,5 @@
-// src/services/api/axiosConfig.js
 import axios from "axios";
+import { store } from "../../store/store";
 
 const baseURL = "https://api.escuelajs.co/api/v1";
 
@@ -11,10 +11,9 @@ const axiosInstance = axios.create({
   },
 });
 
-// Request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    const token = store.getState().auth.token;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -25,14 +24,13 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Response interceptor
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          localStorage.removeItem("token");
+          store.dispatch({ type: "auth/logout" });
           window.location.href = "/login";
           break;
         case 404:

@@ -1,3 +1,4 @@
+// src/Components/Alert.jsx
 import React from "react";
 
 const Alert = ({ isOpen, onClose, onConfirm }) => {
@@ -8,11 +9,10 @@ const Alert = ({ isOpen, onClose, onConfirm }) => {
       <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
         <div className="mb-6">
           <h2 className="text-lg font-semibold mb-2">
-            Are you sure you want to delete this task?
+            Are you sure you want to delete this?
           </h2>
           <p className="text-gray-600">This action cannot be undone.</p>
         </div>
-
         <div className="flex justify-end gap-4">
           <button
             onClick={onClose}
