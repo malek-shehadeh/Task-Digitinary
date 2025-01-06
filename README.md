@@ -38,6 +38,14 @@ This project is a combined **Task Management** and **Chat Application** designed
 - **Task Submission**: Form for adding and editing tasks with validation.
 - **Dynamic Error Messages**: Show validation errors during input.
 
+### Ecommerce
+
+- **Product Details**
+- **Product List**
+- **Add Product**
+- **Delete Product**
+- **Update Product**
+- **Edit Product**
 ---
 
 ## Technologies Used
