@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+// Initial state
 const initialState = {
   users: [],
   user: null,
@@ -9,56 +10,83 @@ const initialState = {
   isAuthenticated: false,
 };
 
+// Helper function to generate token
 const generateToken = () => Math.random().toString(36).substring(2);
 
+// Signup thunk
 export const signup = createAsyncThunk(
   "auth/signup",
   async (userData, { getState, rejectWithValue }) => {
     try {
+      // Get current users from state
       const currentState = getState();
       const existingUsers = currentState.auth?.users || [];
 
+      // Check if email already exists
       const userExists = existingUsers.some(
         (user) => user.email === userData.email
       );
+
       if (userExists) {
-        throw new Error("User with this email already exists");
+        return rejectWithValue({
+          email: "User with this email already exists",
+        });
       }
 
+      // Create new user
       const newUser = {
         ...userData,
         id: Date.now(),
+        createdAt: new Date().toISOString(),
       };
 
       return newUser;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue({
+        submit: error.message || "Signup failed",
+      });
     }
   }
 );
 
+// Login thunk
 export const login = createAsyncThunk(
   "auth/login",
   async (credentials, { getState, rejectWithValue }) => {
     try {
       const { users } = getState().auth;
-      const user = users.find(
-        (u) =>
-          u.email === credentials.email && u.password === credentials.password
-      );
 
-      if (!user) {
-        throw new Error("Invalid email or password");
+      // Check if email exists
+      const userWithEmail = users.find((u) => u.email === credentials.email);
+
+      if (!userWithEmail) {
+        return rejectWithValue({
+          email: "No account found with this email",
+        });
       }
 
+      // Verify password
+      if (userWithEmail.password !== credentials.password) {
+        return rejectWithValue({
+          password: "Incorrect password",
+        });
+      }
+
+      // Generate token and return user data
       const token = generateToken();
-      return { user, access_token: token };
+      return {
+        user: userWithEmail,
+        access_token: token,
+      };
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue({
+        submit: error.message || "Login failed",
+      });
     }
   }
 );
 
+// Auth slice
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -68,26 +96,33 @@ const authSlice = createSlice({
       state.token = null;
       state.isAuthenticated = false;
       state.loading = false;
+      state.error = null;
     },
     clearError: (state) => {
       state.error = null;
     },
-    resetLoading: (state) => {
-      state.loading = false;
+    clearAuthState: (state) => {
+      return initialState;
+    },
+    updateUser: (state, action) => {
+      if (state.user) {
+        state.user = {
+          ...state.user,
+          ...action.payload,
+        };
+      }
     },
   },
   extraReducers: (builder) => {
     builder
-      //////////
-      // signup
-      /////////
+      // Signup cases
       .addCase(signup.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(signup.fulfilled, (state, action) => {
         state.loading = false;
-        if (!state.users) {
+        if (!Array.isArray(state.users)) {
           state.users = [];
         }
         state.users.push(action.payload);
@@ -98,9 +133,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      ////////
-      // Login
-      ///////
+      // Login cases
       .addCase(login.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -115,9 +148,20 @@ const authSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.isAuthenticated = false;
       });
   },
 });
 
-export const { logout, clearError, resetLoading } = authSlice.actions;
+// Export actions
+export const { logout, clearError, clearAuthState, updateUser } =
+  authSlice.actions;
+
+// Selectors
+export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
+export const selectCurrentUser = (state) => state.auth.user;
+export const selectAuthLoading = (state) => state.auth.loading;
+export const selectAuthError = (state) => state.auth.error;
+
+// Export reducer
 export default authSlice.reducer;

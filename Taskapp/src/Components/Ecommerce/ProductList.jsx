@@ -10,12 +10,11 @@ import { PlusCircle } from "lucide-react";
 
 const ProductList = () => {
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.products);
+  const { products, loading, error } = useSelector((state) => state.products);
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const { showToast } = useTaskContext();
-
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
 
@@ -47,13 +46,29 @@ const ProductList = () => {
     setSelectedProduct(null);
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center text-red-500 mt-8">
+        Error loading products: {error}
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-2xl shadow-sm p-6 mb-8">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold text-gray-800 ">Products</h1>
+              <h1 className="text-2xl font-bold text-gray-800">Products</h1>
             </div>
             {isAuthenticated && (
               <Button
@@ -67,7 +82,6 @@ const ProductList = () => {
             )}
           </div>
         </div>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map((product) => (
             <ProductCard
@@ -78,7 +92,6 @@ const ProductList = () => {
             />
           ))}
         </div>
-
         {isFormOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
@@ -97,7 +110,6 @@ const ProductList = () => {
             </div>
           </div>
         )}
-
         <Alert
           isOpen={isAlertOpen}
           onClose={() => {

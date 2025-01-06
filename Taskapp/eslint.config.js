@@ -33,7 +33,8 @@ export default [
         "warn",
         { allowConstantExport: true },
       ],
-      "react/prop-types": "off", // تعطيل قاعدة prop-types
+      "react/prop-types": "off",
+      "react/react-in-jsx-scope": "off",
     },
   },
 ];

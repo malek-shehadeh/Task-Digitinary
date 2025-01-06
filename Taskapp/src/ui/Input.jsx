@@ -17,7 +17,6 @@ export const Input = ({
 
   return (
     <div className={`mb-4 ${className}`}>
-      {/* Label Section */}
       {label && (
         <label className="block text-sm font-medium text-gray-700 mb-1">
           {label}
@@ -26,7 +25,6 @@ export const Input = ({
       )}
 
       <div className="relative">
-        {/* Input Field */}
         <input
           type={type}
           value={value}
@@ -45,7 +43,6 @@ export const Input = ({
           {...props}
         />
 
-        {/* Success Icon */}
         {isValid && (
           <svg
             className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-green-500"
@@ -60,7 +57,6 @@ export const Input = ({
           </svg>
         )}
 
-        {/* Error Icon */}
         {error && (
           <svg
             className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-red-500"
@@ -76,10 +72,8 @@ export const Input = ({
         )}
       </div>
 
-      {/* Helper Text */}
       {helperText && <p className="mt-1 text-sm text-gray-500">{helperText}</p>}
 
-      {/* Error Message */}
       {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
     </div>
   );

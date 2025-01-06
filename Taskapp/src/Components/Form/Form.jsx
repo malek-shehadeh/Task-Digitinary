@@ -26,6 +26,9 @@ const Form = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(value))
           return "Please enter a valid email address";
+        if (!value.endsWith(".com") && !value.endsWith(".net")) {
+          return "Email must end with .com or .net";
+        }
       }
       return "";
     },
@@ -106,7 +109,7 @@ const Form = () => {
 
   if (isSubmitted) {
     return (
-      <div className="text-center p-6 bg-green-50 rounded-lg">
+      <div className="text-center p-48 bg-green-50 rounded-lg">
         <h2 className="text-2xl font-bold text-green-600 mb-2">Success!</h2>
         <p className="text-green-600">Form submitted successfully.</p>
       </div>

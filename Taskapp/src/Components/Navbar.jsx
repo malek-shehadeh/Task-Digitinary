@@ -37,7 +37,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center">
-            <img src={Logo} alt="Logo" className="h-10 w-48" />
+            <img src={Logo} alt="Logo" className="h-10 w-auto" />
           </Link>
 
           <button
@@ -48,54 +48,66 @@ const Navbar = () => {
           </button>
 
           <div className="hidden md:flex items-center space-x-4">
-            <div className="relative">
-              <button
-                onClick={toggleDropdown}
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Task Manager
-              </button>
-              {isDropdownOpen && (
-                <div className="absolute right-0 bg-gray-700 rounded-md shadow-lg mt-2 py-2 w-48">
-                  <Link
-                    to="/task-manager"
-                    className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-600"
+            {isAuthenticated ? (
+              <>
+                <div className="relative">
+                  <button
+                    onClick={toggleDropdown}
+                    className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
                     Task Manager
-                  </Link>
-                  <Link
-                    to="/favorites/redux"
-                    className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-600"
-                  >
-                    Redux Favorites
-                  </Link>
-                  <Link
-                    to="/favorites/context"
-                    className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-600"
-                  >
-                    Context Favorites
-                  </Link>
+                  </button>
+                  {isDropdownOpen && (
+                    <div className="absolute right-0 bg-gray-700 rounded-md shadow-lg mt-2 py-2 w-48">
+                      <Link
+                        to="/task-manager"
+                        className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-600"
+                      >
+                        Task Manager
+                      </Link>
+                      <Link
+                        to="/favorites/redux"
+                        className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-600"
+                      >
+                        Redux Favorites
+                      </Link>
+                      <Link
+                        to="/favorites/context"
+                        className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-600"
+                      >
+                        Context Favorites
+                      </Link>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+
+                <Link
+                  to="/appchat"
+                  className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  App-Chat
+                </Link>
+                <Link
+                  to="/ecommerce-manager"
+                  className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Ecommerce
+                </Link>
+              </>
+            ) : (
+              <Link
+                to="/ecommerce-manager"
+                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Ecommerce
+              </Link>
+            )}
 
             <Link
               to="/form"
               className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
             >
               Form
-            </Link>
-            <Link
-              to="/appchat"
-              className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-            >
-              App-Chat
-            </Link>
-            <Link
-              to="/ecommerce-manager"
-              className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-            >
-              Ecommerce
             </Link>
 
             <div className="flex items-center space-x-4 ml-4 border-l border-gray-600 pl-4">
@@ -126,47 +138,67 @@ const Navbar = () => {
         {/* mobile */}
         <div className={`md:hidden ${isMobileMenuOpen ? "block" : "hidden"}`}>
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link
-              to="/task-manager"
-              className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Task Manager
-            </Link>
-            <Link
-              to="/favorites/redux"
-              className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Redux Favorites
-            </Link>
-            <Link
-              to="/favorites/context"
-              className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Context Favorites
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <Link
+                  to="/task-manager"
+                  className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Task Manager
+                </Link>
+                <Link
+                  to="/favorites/redux"
+                  className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Redux Favorites
+                </Link>
+                <Link
+                  to="/favorites/context"
+                  className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Context Favorites
+                </Link>
+                <Link
+                  to="/form"
+                  className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Form
+                </Link>
+                <Link
+                  to="/appchat"
+                  className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  App-Chat
+                </Link>
+                <Link
+                  to="/ecommerce-manager"
+                  className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Ecommerce
+                </Link>
+              </>
+            ) : (
+              <Link
+                to="/ecommerce-manager"
+                className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Ecommerce
+              </Link>
+            )}
+
             <Link
               to="/form"
               className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Form
-            </Link>
-            <Link
-              to="/appchat"
-              className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              App-Chat
-            </Link>
-            <Link
-              to="/ecommerce-manager"
-              className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Ecommerce
             </Link>
 
             <div className="border-t border-gray-700 mt-4 pt-4">
