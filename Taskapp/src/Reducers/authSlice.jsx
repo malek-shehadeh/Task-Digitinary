@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// Initial state
 const initialState = {
   users: [],
   user: null,
@@ -10,19 +9,16 @@ const initialState = {
   isAuthenticated: false,
 };
 
-// Helper function to generate token
 const generateToken = () => Math.random().toString(36).substring(2);
 
-// Signup thunk
+// Signup
 export const signup = createAsyncThunk(
   "auth/signup",
   async (userData, { getState, rejectWithValue }) => {
     try {
-      // Get current users from state
       const currentState = getState();
       const existingUsers = currentState.auth?.users || [];
 
-      // Check if email already exists
       const userExists = existingUsers.some(
         (user) => user.email === userData.email
       );
@@ -33,7 +29,6 @@ export const signup = createAsyncThunk(
         });
       }
 
-      // Create new user
       const newUser = {
         ...userData,
         id: Date.now(),
@@ -49,14 +44,13 @@ export const signup = createAsyncThunk(
   }
 );
 
-// Login thunk
+// Login
 export const login = createAsyncThunk(
   "auth/login",
   async (credentials, { getState, rejectWithValue }) => {
     try {
       const { users } = getState().auth;
 
-      // Check if email exists
       const userWithEmail = users.find((u) => u.email === credentials.email);
 
       if (!userWithEmail) {
@@ -65,14 +59,12 @@ export const login = createAsyncThunk(
         });
       }
 
-      // Verify password
       if (userWithEmail.password !== credentials.password) {
         return rejectWithValue({
           password: "Incorrect password",
         });
       }
 
-      // Generate token and return user data
       const token = generateToken();
       return {
         user: userWithEmail,
@@ -86,7 +78,13 @@ export const login = createAsyncThunk(
   }
 );
 
-// Auth slice
+// logout
+export const logoutAndClearCart = () => (dispatch) => {
+  dispatch(authSlice.actions.logout());
+  dispatch({ type: "cart/clearCart" });
+};
+
+// Auth
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -115,7 +113,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Signup cases
       .addCase(signup.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -132,8 +129,6 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-
-      // Login cases
       .addCase(login.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -153,15 +148,11 @@ const authSlice = createSlice({
   },
 });
 
-// Export actions
-export const { logout, clearError, clearAuthState, updateUser } =
-  authSlice.actions;
+export const { clearError, clearAuthState, updateUser } = authSlice.actions;
 
-// Selectors
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
 export const selectCurrentUser = (state) => state.auth.user;
 export const selectAuthLoading = (state) => state.auth.loading;
 export const selectAuthError = (state) => state.auth.error;
 
-// Export reducer
 export default authSlice.reducer;

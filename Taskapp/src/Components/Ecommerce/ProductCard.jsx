@@ -51,7 +51,7 @@ const ProductCard = ({ product, onEdit, onDelete }) => {
 
       <div className="p-4 space-y-3">
         <div className="absolute top-2 left-2 bg-white px-3 py-1 rounded-full shadow-md">
-          <span className="text-lg font-bold text-blue-600">
+          <span className="text-lg font-bold text-green-600">
             {product.price.toFixed(2)}JD
           </span>
         </div>

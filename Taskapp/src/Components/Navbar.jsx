@@ -1,28 +1,23 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../Reducers/authSlice";
-import { Menu, X } from "lucide-react";
+import { logoutAndClearCart } from "../Reducers/authSlice";
+import { Menu, X, ShoppingCart } from "lucide-react";
 import Logo from "../assets/logo.png";
 
 const Navbar = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+  const { totalQuantity } = useSelector((state) => state.cart);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
-    if (isDropdownOpen) setIsDropdownOpen(false);
   };
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logoutAndClearCart());
     navigate("/ecommerce-manager/login");
     setIsMobileMenuOpen(false);
   };
@@ -50,37 +45,12 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-4">
             {isAuthenticated ? (
               <>
-                <div className="relative">
-                  <button
-                    onClick={toggleDropdown}
-                    className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Task Manager
-                  </button>
-                  {isDropdownOpen && (
-                    <div className="absolute right-0 bg-gray-700 rounded-md shadow-lg mt-2 py-2 w-48">
-                      <Link
-                        to="/task-manager"
-                        className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-600"
-                      >
-                        Task Manager
-                      </Link>
-                      <Link
-                        to="/favorites/redux"
-                        className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-600"
-                      >
-                        Redux Favorites
-                      </Link>
-                      <Link
-                        to="/favorites/context"
-                        className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-600"
-                      >
-                        Context Favorites
-                      </Link>
-                    </div>
-                  )}
-                </div>
-
+                <Link
+                  to="/task-manager"
+                  className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Task Manager
+                </Link>
                 <Link
                   to="/appchat"
                   className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
@@ -110,6 +80,20 @@ const Navbar = () => {
               Form
             </Link>
 
+            {isAuthenticated && (
+              <Link
+                to="/ecommerce-manager/cart"
+                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium relative"
+              >
+                <ShoppingCart size={20} className="inline-block" />
+                {totalQuantity > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                    {totalQuantity}
+                  </span>
+                )}
+              </Link>
+            )}
+
             <div className="flex items-center space-x-4 ml-4 border-l border-gray-600 pl-4">
               {isAuthenticated ? (
                 <>
@@ -118,7 +102,7 @@ const Navbar = () => {
                   </span>
                   <button
                     onClick={handleLogout}
-                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
                   >
                     Logout
                   </button>
@@ -126,7 +110,7 @@ const Navbar = () => {
               ) : (
                 <button
                   onClick={handleLogin}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                  className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
                 >
                   Login
                 </button>
@@ -135,7 +119,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* mobile */}
+        {/* Mobile Menu */}
         <div className={`md:hidden ${isMobileMenuOpen ? "block" : "hidden"}`}>
           <div className="px-2 pt-2 pb-3 space-y-1">
             {isAuthenticated ? (
@@ -161,13 +145,7 @@ const Navbar = () => {
                 >
                   Context Favorites
                 </Link>
-                <Link
-                  to="/form"
-                  className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Form
-                </Link>
+
                 <Link
                   to="/appchat"
                   className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
@@ -182,15 +160,30 @@ const Navbar = () => {
                 >
                   Ecommerce
                 </Link>
+                <Link
+                  to="/ecommerce-manager/cart"
+                  className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium relative"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <ShoppingCart size={20} className="inline-block mr-2" />
+                  Cart
+                  {totalQuantity > 0 && (
+                    <span className="ml-2 bg-blue-600 text-white rounded-full px-2 py-1 text-xs">
+                      {totalQuantity}
+                    </span>
+                  )}
+                </Link>
               </>
             ) : (
-              <Link
-                to="/ecommerce-manager"
-                className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Ecommerce
-              </Link>
+              <>
+                <Link
+                  to="/ecommerce-manager"
+                  className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Ecommerce
+                </Link>
+              </>
             )}
 
             <Link

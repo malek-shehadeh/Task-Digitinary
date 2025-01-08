@@ -7,6 +7,8 @@ import Alert from "../../ui/Alert";
 import { Button } from "../../ui/index";
 import { useTaskContext } from "../../hooks/useTaskContext";
 import { PlusCircle } from "lucide-react";
+import SearchBar from "../../ui/SearchBar";
+import Pagination from "../../ui/Pagination";
 
 const ProductList = () => {
   const dispatch = useDispatch();
@@ -18,9 +20,39 @@ const ProductList = () => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
 
+  // search and pagination
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 8;
+
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
+
+  const filteredProducts = products.filter(
+    (product) =>
+      product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.category?.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   const handleEdit = (product) => {
     setSelectedProduct(product);
@@ -66,32 +98,57 @@ const ProductList = () => {
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-2xl shadow-sm p-6 mb-8">
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
               <h1 className="text-2xl font-bold text-gray-800">Products</h1>
             </div>
-            {isAuthenticated && (
-              <Button
-                variant="primary"
-                onClick={() => setIsFormOpen(true)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg transform transition-transform hover:scale-105"
-              >
-                <PlusCircle size={20} />
-                <span>Add New Product</span>
-              </Button>
-            )}
+            <div className="flex items-center gap-4 w-full sm:w-auto">
+              <SearchBar
+                searchTerm={searchTerm}
+                onSearch={setSearchTerm}
+                onClear={() => setSearchTerm("")}
+              />
+              {isAuthenticated && (
+                <Button
+                  variant="primary"
+                  onClick={() => setIsFormOpen(true)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-teal-500 hover:bg-teal-600 text-white transform transition-transform hover:scale-105 whitespace-nowrap"
+                >
+                  <PlusCircle size={22} />
+                  <span>Add New Product</span>
+                </Button>
+              )}
+            </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onEdit={handleEdit}
-              onDelete={handleDeleteClick}
-            />
-          ))}
-        </div>
+
+        {filteredProducts.length === 0 ? (
+          <div className="text-center text-gray-500 mt-8">
+            No products found matching your search.
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {currentProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  onEdit={handleEdit}
+                  onDelete={handleDeleteClick}
+                />
+              ))}
+            </div>
+
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
+          </>
+        )}
+
         {isFormOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
@@ -110,6 +167,7 @@ const ProductList = () => {
             </div>
           </div>
         )}
+
         <Alert
           isOpen={isAlertOpen}
           onClose={() => {

@@ -158,10 +158,9 @@ const SignupForm = () => {
             helperText={field.helperText}
           />
         ))}
-
         <Button
           type="submit"
-          variant="primary"
+          variant="teal"
           disabled={!isFormValid() || isSubmitting}
           className="w-full mt-4"
         >

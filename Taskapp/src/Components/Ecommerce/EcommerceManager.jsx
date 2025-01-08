@@ -6,6 +6,7 @@ import Login from "../Ecommerce/LoginForm";
 import Signup from "../Ecommerce/SignupForm";
 import ProductForm from "./ProductForm";
 import { Toast } from "../../ui/index";
+import Cart from "./Cart";
 
 const EcommerceManager = () => {
   return (
@@ -16,6 +17,7 @@ const EcommerceManager = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/addproduct" element={<ProductForm />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
 
       <Toast />

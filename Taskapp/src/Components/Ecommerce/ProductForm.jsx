@@ -198,7 +198,6 @@ const ProductForm = ({ product, onClose }) => {
         </Button>
         <Button
           type="submit"
-          variant="primary"
           disabled={
             isSubmitting ||
             !formData.title ||
@@ -206,6 +205,7 @@ const ProductForm = ({ product, onClose }) => {
             !formData.description ||
             !formData.images.some((img) => img.trim())
           }
+          className="px-4 py-2 rounded-lg bg-teal-500 hover:bg-teal-600 text-white transform transition-transform hover:scale-105 disabled:bg-teal-300 disabled:cursor-not-allowed"
         >
           {isSubmitting
             ? product

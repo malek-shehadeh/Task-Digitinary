@@ -1,4 +1,3 @@
-// src/Components/Alert.jsx
 import React from "react";
 
 const Alert = ({ isOpen, onClose, onConfirm }) => {

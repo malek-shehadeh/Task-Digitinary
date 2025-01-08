@@ -107,7 +107,7 @@ const productSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // Add product
+      // Add
       .addCase(addProduct.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -120,7 +120,7 @@ const productSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // Update product
+      // Update
       .addCase(updateProduct.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -138,7 +138,7 @@ const productSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // Delete product
+      // Delete
       .addCase(deleteProduct.pending, (state) => {
         state.loading = true;
         state.error = null;

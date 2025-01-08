@@ -13,18 +13,20 @@ import storage from "redux-persist/lib/storage";
 import favoriteReducer from "../Reducers/favoriteSlice";
 import productReducer from "../Reducers/productSlice";
 import authReducer from "../Reducers/authSlice";
+import cartReducer from "../Reducers/cartSlice";
 
 const rootReducer = combineReducers({
   favorites: favoriteReducer,
   products: productReducer,
   auth: authReducer,
+  cart: cartReducer,
 });
 
 const persistConfig = {
   key: "root",
   storage,
   version: 1,
-  whitelist: ["favorites", "auth"],
+  whitelist: ["favorites", "auth", "cart"],
   debug: true,
 };
 

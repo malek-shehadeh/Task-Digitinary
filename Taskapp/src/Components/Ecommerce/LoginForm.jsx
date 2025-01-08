@@ -8,7 +8,7 @@ import { Button } from "../../ui/index";
 const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.auth);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -112,7 +112,7 @@ const LoginForm = () => {
     }
 
     try {
-      const result = await dispatch(login(formData)).unwrap();
+      await dispatch(login(formData)).unwrap();
       navigate("/ecommerce-manager");
     } catch (err) {
       if (err.email || err.password) {
@@ -167,7 +167,7 @@ const LoginForm = () => {
 
         <Button
           type="submit"
-          variant="primary"
+          variant="teal"
           disabled={!isFormValid() || loading}
           className="w-full mt-4"
         >
