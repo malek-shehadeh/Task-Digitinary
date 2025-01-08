@@ -47,8 +47,6 @@ This project is a combined **Task Management** and **Chat Application** designed
 - **Update Product**
 - **Edit Product**
 
----
-
 ## Technologies Used
 
 - **React.js**: Frontend framework.
